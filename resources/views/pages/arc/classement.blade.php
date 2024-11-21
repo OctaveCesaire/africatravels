@@ -1,14 +1,14 @@
 @extends('pages.index')
 @section('content')
-    <main class="main-content position-relative max-height-vh-100 h-100">
-        @include('layouts.managers.navbar')
+    <main class="main-content position-relative max-height-vh-100 h-100 ">
+        @include('layouts.arc.navbar')
         <div class="py-4 px-1">
             <div class="card bg-dark shadow">
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
-                        <h5 class="my-auto">CLASSEMENT</h5>
-                        <span class="badge my-auto bg-info">
-                            NOTE DE SERVICE : >=4.5
+                        <h5 class="my-auto">LE CLASSEMENT</h5>
+                        <span class="my-auto badge bg-info">
+                            CHiffre d'affaire : >= 0
                         </span>
                     </div>
                 </div>
@@ -16,25 +16,17 @@
                     <table class="table ">
                         <thead>
                             <th class="text-start" scope="col">#</th>
-                            <th class="text-center" scope="col">Agences</th>
-                            <th class="text-center" scope="col">Note</th>
-                            <th class="text-center" scope="col">Adresse</th>
-                            <th class="text-center" scope="col">
-                                <div class="d-flex">
-                                    <div class="my-auto">Date inscription</div>
-                                    <span class="my-auto sort-arrows d-flex flex-column">
-                                        <i class="sort-asc text-xxs" style="cursor: pointer" data-column="date" data-order="asc">&#9650;</i> <!-- Flèche haut -->
-                                        <i class="sort-desc text-xxs" style="cursor: pointer" data-column="date" data-order="desc">&#9660;</i> <!-- Flèche bas -->
-                                    </span>
-                                </div>
-                            </th>
+                            <th class="text-center" scope="col">Nom</th>
+                            <th class="text-center" scope="col">Status</th>
+                            <th class="text-center" scope="col">Evènements</th>
+                            <th class="text-center" scope="col">Date paiement </th>
                         </thead>
                         <tbody>
                             @if ($list->count() > 0)
                                 @foreach ($list as $elt)
                                     <tr>
                                         <td class="my-auto text-start" scope="row">
-                                            <i class="fas fa-eye fa-xs btn btn-xs btn-outline-info consult" data-id="{{ $elt->id }}"></i>
+                                            <i class="ni ni-zoom-split-in fa-xs btn btn-xs btn-outline-info consult" data-id="{{ $elt->id }}"></i>
                                         </td>
                                         <td class="my-auto text-center">{{ $elt->titre }}</td>
                                         <td class="my-auto text-center">
@@ -47,14 +39,14 @@
                                             {{-- @endif --}}
                                         </td>
                                         <td class="my-auto text-center">
-                                            <span class="text-muted badge bg-secondary rounded">12</span>
+                                            <span class="text-muted badge bg-secondary rounded">Evenement</span>
                                         </td>
-                                        <td class="my-auto text-center"><span class="text-white">{{ $elt->eventDate }}</span></td>
+                                        <td class="my-auto text-center"><span class="text-white">12 Dec 2023</span></td>
                                     </tr>
                                 @endforeach   
                             @else
                                 <tr class="text-center modal">
-                                    Aucuns événements d'organiser
+                                    Aucunes transactions enregistrer
                                 </tr>
                             @endif
                         </tbody>
@@ -63,10 +55,11 @@
             </div>
         </div>
     </main>
+    <img src="" alt="">
 @endsection
+
 @push('js')
     <script>
-        // Fonction de vérification de tableau vide ou pas
         function isJsonEmpty(json) {
             if (json === null || json === undefined) {
                 return true; // JSON est null ou undefined
@@ -82,96 +75,24 @@
             // Si ce n'est pas un objet ou tableau, ce n'est pas du JSON
             return true;
         }
-        $(document).on('click', '.consult', function () {
-            var id = $(this).data('id'); // Récupère l'ID de l'événement
-            $.ajax({
-                url: '/api/print-specific-event/' + id,
-                type: 'GET',
-                success: function (response) {
-                    if (!response) {
-                        swal({ text: "Aucune donnée disponible.", icon: 'error' });
-                        return;
-                    }
-
-                    // Affiche la modale de consultation
-                    showModal(response, true).then((editAction) => {
-                        if (editAction) {
-                            // Passe en mode édition
-                            showModal(response, false).then((updateAction) => {
-                                if (updateAction) {
-                                    updateEvent(id); // Lance la mise à jour
-                                }
-                            });
-                        }
-                    });
-                },
-                error: function (xhr) {
-                    handleAjaxError(xhr);
-                }
-            });
-        });
         function showModal(data, isReadonly) {
             const readonlyAttr = isReadonly ? 'readonly' : '';
             return swal({
-                title: isReadonly ? "Détail de l'Événement" : "Mise à jour de l'Événement",
+                title: isReadonly ? "Détail de l'agence" : "Mise à jour de l'Événement",
                 content: {
                     element: 'div',
                     attributes: {
                         innerHTML: `
-                            <div class="row col-12">
-                                <div class="col-4 mb-2">
-                                    <label>Titre</label>
-                                    <input type="text" id="titre" class="form-control" ${readonlyAttr} value="${data.titre || ''}">
-                                </div>
-                                <div class="col-4 mb-2">
-                                    <label>Date</label>
-                                    <input type="datetime-local" id="date" class="form-control" ${readonlyAttr} value="${data.eventDate || ''}">
-                                </div>
-                                <div class="col-4 mb-2">
-                                    <label>Prix</label>
-                                    <input type="number" id="prix" min="0" class="form-control" ${readonlyAttr} value="${data.prix || ''}">
-                                </div>
-                            </div>
-                            <div class="col-12 mb-2">
-                                <label>Image</label>
-                                <input type="file" id="galerie" class="form-control" ${readonlyAttr}>
-                                <img src="${data.image_url || ''}" alt="Image" class="img-fluid mt-2">
-                            </div>
-                            <div class="col-12 mb-2">
-                                <label>Description</label>
-                                <textarea id="description cols="30" rows="10" class="form-control" ${readonlyAttr}>${data.description || ''}</textarea>
-                            </div>
+                            <fieldset class="row col-12 border mb-2">
+                                <legend class="h5 col-12">INFORMATION SUR LE(S) EVENEMENT(S)</legend>
+                                <ul class="list-group list-group-numbered">
+                                    
+                                    <li class="list-group-item"> <strong> Nom du l'evenement  </strong>: <spam class="badge bg-info">NOTE </span> </li>
+                                </ul>
+                            </fieldset>
                         `
                     }
-                },
-                buttons: isReadonly
-                    ? { cancel: "Fermer", edit: { text: "Éditer", visible: true, closeModal: false } }
-                    : { cancel: "Annuler", update: { text: "Mettre à jour", visible: true, closeModal: false } }
-            });
-        }
-        function updateEvent(id) {
-            var formData = new FormData();
-            formData.append('_token', "{{ csrf_token() }}");
-            formData.append('titre', $('#titre').val());
-            formData.append('date', $('#date').val());
-            formData.append('description', $('#description').val());
-            formData.append('prix', $('#prix').val());
-
-            const imageFile = $('#galerie')[0].files[0];
-            if (imageFile) formData.append('image', imageFile);
-
-            $.ajax({
-                url: '/api/update-event/' + id,
-                type: 'POST', // PUT selon l'implémentation backend
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function () {
-                    swal({ icon: 'success', text: 'Données mises à jour avec succès.' });
-                },
-                error: function (xhr) {
-                    handleAjaxError(xhr);
-                }
+                } 
             });
         }
         function handleAjaxError(xhr) {
@@ -185,30 +106,21 @@
                 swal({ text: "Une erreur est survenue.", icon: 'warning' });
             }
         }
-
-        // Trie par date
-        function sortTable(columnIndex, order) {
-            const tableBody = document.getElementById('table-body');
-            const rows = Array.from(tableBody.rows);
-
-            rows.sort((a, b) => {
-                const dateA = new Date(a.cells[columnIndex].innerText);
-                const dateB = new Date(b.cells[columnIndex].innerText);
-
-                return order === 'asc' ? dateA - dateB : dateB - dateA;
-            });
-
-            // Réinsérer les lignes triées dans le tableau
-            tableBody.innerHTML = '';
-            rows.forEach(row => tableBody.appendChild(row));
-        }
-
-        // Gestion des clics sur les flèches de tri
-        document.querySelectorAll('.sort-arrows i').forEach(arrow => {
-            arrow.addEventListener('click', () => {
-                const columnIndex = 4; // Index de la colonne "Date paiement" (0-based)
-                const order = arrow.dataset.order; // asc ou desc
-                sortTable(columnIndex, order);
+        $(document).on('click', '.consult', function () {
+            var id = $(this).data('id'); // Récupère l'ID de l'événement
+            $.ajax({
+                url: '/api/print-specific-event/' + id,
+                type: 'GET',
+                success: function (response) {
+                    if (!response) {
+                        swal({ text: "Aucune donnée disponible.", icon: 'error' });
+                        return;
+                    }
+                    showModal(response, true);
+                },
+                error: function (xhr) {
+                    handleAjaxError(xhr);
+                }
             });
         });
     </script>

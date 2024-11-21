@@ -1,7 +1,7 @@
 @extends('pages.index')
 @section('content')
     <main class="main-content position-relative max-height-vh-100 h-100 ">
-        @include('layouts.managers.navbar')
+        @include('layouts.arc.navbar')
         <div class="py-4 px-1">
             <div class="card bg-dark shadow">
                 <div class="card-header">
@@ -26,7 +26,7 @@
                                 @foreach ($list as $elt)
                                     <tr>
                                         <td class="my-auto text-start" scope="row">
-                                            <i class="fas fa-eye fa-xs btn btn-xs btn-outline-info consult" data-id="{{ $elt->id }}"></i>
+                                            <i class="ni ni-zoom-split-in fa-xs btn btn-xs btn-outline-info consult" data-id="{{ $elt->id }}"></i>
                                         </td>
                                         <td class="my-auto text-center">{{ $elt->titre }}</td>
                                         <td class="my-auto text-center">

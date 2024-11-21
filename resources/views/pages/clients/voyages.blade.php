@@ -1,6 +1,4 @@
-@extends('pages.index')
-@section('content')
-    @include('layouts.clients.navbar')
+<x-guest-layout>
 
     <header class=" bg-light d-flex align-items-center justify-content-center text-center text-white py-4">
         <h1 id="destination">Nos Prochaines Activités</h1>
@@ -37,76 +35,75 @@
             
         </div>
     </div>
-    
-@endsection
 
-@push('js')
-    <script>
-        $(document).on('click','.detail',function(){
-            var id = $(this).data('id');
-            $.ajax({
-                url : 'api/info/'+id,
-                type: 'GET',
-                success: (data)=>{
-                    swal({
-                        title : data.titre,
-                        content:{
-                            element: 'div',
-                            attributes:{
-                                innerHTML:`
-                                
-                                    <div class="row col-12">
-                                        <div class="col-5">
-                                            Galerie
-                                        </div>
-                                        <div class="col-7">
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    ${data.eventDate}
-                                                </div>
-                                                <div class="col-6">
-                                                    Prix
-                                                </div>
-                                            </div>
-                                            <input type="hidden" name="id" data-id="${data.id}">
-                                            ${data.description || "Aucune description disponible"}
-                                        </div>
-                                    </div>
-                                `
-                            }
-                        },
-                        buttons:{
-                            cancel :{
-                                text: "Fermer",
-                                value: true,
-                                visible: true
-                            },
-                            confirm:{
-                                text: "Reserver ma place",
-                                className: 'reserved',
-                                closeModal: false
-                            }
-                        }
-                    }).then((value)=>{
+    @push('js')
+        <script>
+            $(document).on('click','.detail',function(){
+                var id = $(this).data('id');
+                $.ajax({
+                    url : 'api/info/'+id,
+                    type: 'GET',
+                    success: (data)=>{
                         swal({
-                            title : "Réservation en cours" + data.id,
-                            text : "Effectuer ma réservation avec Stripe Ou PayPal ou Feedapay",
-                            button:{
-                                text : "OK",
+                            title : data.titre,
+                            content:{
+                                element: 'div',
+                                attributes:{
+                                    innerHTML:`
+                                    
+                                        <div class="row col-12">
+                                            <div class="col-5">
+                                                Galerie
+                                            </div>
+                                            <div class="col-7">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        ${data.eventDate}
+                                                    </div>
+                                                    <div class="col-6">
+                                                        Prix
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" name="id" data-id="${data.id}">
+                                                ${data.description || "Aucune description disponible"}
+                                            </div>
+                                        </div>
+                                    `
+                                }
+                            },
+                            buttons:{
+                                cancel :{
+                                    text: "Fermer",
+                                    value: true,
+                                    visible: true
+                                },
+                                confirm:{
+                                    text: "Reserver ma place",
+                                    className: 'reserved',
+                                    closeModal: false
+                                }
                             }
+                        }).then((value)=>{
+                            swal({
+                                title : "Réservation en cours" + data.id,
+                                text : "Effectuer ma réservation avec Stripe Ou PayPal ou Feedapay",
+                                button:{
+                                    text : "OK",
+                                }
 
+                            })
                         })
-                    })
-                },
-                error: function(){
-                    swal('error','Erreur lors de l\'affichage des informations','error')
-                }
+                    },
+                    error: function(){
+                        swal('error','Erreur lors de l\'affichage des informations','error')
+                    }
+                })
             })
-        })
 
-        // $(document).on('click','.reserved',(){
+            // $(document).on('click','.reserved',(){
 
-        // })
+            // })
 
-    </script>
-@endpush
+        </script>
+    @endpush
+</x-guest-layout>

@@ -1,7 +1,4 @@
-
-@extends('pages.index')
-@section('content')
-    @include('layouts.clients.navbar')
+<x-guest-layout>
     <div  class="my-9" style="background-color:#F4F7FE">
         <!-- Entête -->
         <header class="d-flex align-items-center justify-content-center flex-column text-center text-white">
@@ -54,5 +51,4 @@
             </div>
         </div>
     </div>
-
-@endsection
+</x-guest-layout>
