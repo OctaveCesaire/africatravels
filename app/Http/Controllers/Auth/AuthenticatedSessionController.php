@@ -32,7 +32,7 @@ class AuthenticatedSessionController extends Controller
         
         if(auth()->user()->hasRole('manager'))
             return redirect()->route('arcDash');
-        return redirect()->route('dashboard');
+        return redirect()->route('home');
     }
 
     /**

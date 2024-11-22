@@ -11,24 +11,24 @@
                         </span>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body table-responsive">
                     <table class="table ">
                         <thead>
-                            <th class="text-start text-xs" scope="col">#</th>
-                            <th class="text-center text-xs" scope="col">Nom</th>
-                            <th class="text-center text-xs" scope="col">Status</th>
-                            <th class="text-center text-xs" scope="col">Evènements</th>
-                            <th class="text-center text-xs" scope="col">Date paiement </th>
+                            <th class="text-start" scope="col">#</th>
+                            <th class="text-center" scope="col">Nom</th>
+                            <th class="text-center" scope="col">Status</th>
+                            <th class="text-center" scope="col">Evènements</th>
+                            <th class="text-center" scope="col">Date paiement </th>
                         </thead>
                         <tbody>
                             @if ($list->count() > 0)
                                 @foreach ($list as $elt)
                                     <tr>
-                                        <td class="my-auto text-start text-xs" scope="row">
+                                        <td class="my-auto text-start" scope="row">
                                             <i class="ni ni-zoom-split-in btn btn-xs btn-outline-info consult" data-id="{{ $elt->id }}"></i>
                                         </td>
-                                        <td class="my-auto text-center text-xs">{{ $elt->titre }}</td>
-                                        <td class="my-auto text-center text-xs">
+                                        <td class="my-auto text-center">{{ $elt->titre }}</td>
+                                        <td class="my-auto text-center">
                                             {{-- @if ($elt->status === 'à venir') --}}
                                                 <span class="badge bg-warning">à venir</span>
                                             {{-- @elseif ($elt->status === 'lancer') --}}
@@ -37,10 +37,10 @@
                                                 <span class="badge bg-danger">finir</span>
                                             {{-- @endif --}}
                                         </td>
-                                        <td class="my-auto text-center text-xs">
+                                        <td class="my-auto text-center">
                                             <span class="text-muted badge bg-secondary rounded">Evenement</span>
                                         </td>
-                                        <td class="my-auto text-center text-xs"><span class="text-white">12 Dec 2023</span></td>
+                                        <td class="my-auto text-center"><span class="text-white">12 Dec 2023</span></td>
                                     </tr>
                                 @endforeach   
                             @else

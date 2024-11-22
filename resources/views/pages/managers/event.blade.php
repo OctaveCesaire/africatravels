@@ -6,19 +6,19 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <h5 class="my-auto">MES EVENEMENTS</h5>
-                        <span class="btn btn-xs my-auto btn-add btn-outline-info">
+                        <span class="btn my-auto btn-add btn-outline-info">
                             <i class="ni ni-fat-add"></i>
                         </span>
                     </div>
                 </div>
-                <div class="card-body">
-                    <table class="table ">
+                <div class="card-body table-responsive">
+                    <table class="table">
                         <thead>
-                            <th class="text-start text-xs" scope="col">#</th>
-                            <th class="text-center text-xs" scope="col">Nom</th>
-                            <th class="text-center text-xs" scope="col">Status</th>
-                            <th class="text-center text-xs" scope="col">Nbr participants</th>
-                            <th class="text-center text-xs" scope="col">
+                            <th class="text-start" scope="col">#</th>
+                            <th class="text-center" scope="col">Nom</th>
+                            <th class="text-center" scope="col">Status</th>
+                            <th class="text-center" scope="col">Nbr participants</th>
+                            <th class="text-center" scope="col">
                                 <div class="d-flex">
                                     <div class="my-auto">Date évènement</div>
                                     <span class="my-auto sort-arrows d-flex flex-column">
@@ -32,11 +32,11 @@
                             @if ($list->count() > 0)
                                 @foreach ($list as $elt)
                                     <tr>
-                                        <td class="my-auto text-start text-xs" scope="row">
+                                        <td class="my-auto text-start" scope="row">
                                             <i class="ni ni-zoom-split-in btn btn-xs btn-outline-info consult" data-id="{{ $elt->id }}"></i>
                                         </td>
-                                        <td class="my-auto text-center text-xs">{{ $elt->titre }}</td>
-                                        <td class="my-auto text-center text-xs">
+                                        <td class="my-auto text-center">{{ $elt->titre }}</td>
+                                        <td class="my-auto text-center">
                                             {{-- @if ($elt->status === 'à venir') --}}
                                                 <span class="badge bg-warning">à venir</span>
                                             {{-- @elseif ($elt->status === 'lancer') --}}
@@ -45,10 +45,10 @@
                                                 <span class="badge bg-danger">finir</span>
                                             {{-- @endif --}}
                                         </td>
-                                        <td class="my-auto text-center text-xs">
+                                        <td class="my-auto text-center">
                                             <span class="text-muted badge bg-secondary rounded">12</span>
                                         </td>
-                                        <td class="my-auto text-center text-xs"><span class="text-white">{{ $elt->eventDate }}</span></td>
+                                        <td class="my-auto text-center"><span class="text-white">{{ $elt->eventDate }}</span></td>
                                     </tr>
                                 @endforeach   
                             @else
@@ -116,12 +116,13 @@
                         cancel: {
                             text: "Fermer",
                             visible: true,
-                            value: true
+                            value: false
                         },
                         confirm: {
                             text: 'Créer',
                             className: 'creer',
-                            closeModal: false
+                            closeModal: false,
+                            value:true
                         }
                     }
                 }).then((data) => {

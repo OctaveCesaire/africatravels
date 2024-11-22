@@ -41,7 +41,7 @@
             $(document).on('click','.detail',function(){
                 var id = $(this).data('id');
                 $.ajax({
-                    url : 'api/info/'+id,
+                    url : '/api/info/'+id,
                     type: 'GET',
                     success: (data)=>{
                         swal({
@@ -74,35 +74,33 @@
                             buttons:{
                                 cancel :{
                                     text: "Fermer",
-                                    value: true,
+                                    value: false,
                                     visible: true
                                 },
                                 confirm:{
                                     text: "Reserver ma place",
                                     className: 'reserved',
+                                    value: true,
                                     closeModal: false
                                 }
                             }
                         }).then((value)=>{
-                            swal({
-                                title : "Réservation en cours" + data.id,
-                                text : "Effectuer ma réservation avec Stripe Ou PayPal ou Feedapay",
-                                button:{
-                                    text : "OK",
-                                }
+                            if(value)
+                                swal({
+                                    title : "Réservation en cours" + data.id,
+                                    text : "Effectuer ma réservation avec Stripe Ou PayPal ou Feedapay",
+                                    button:{
+                                        text : "OK",
+                                    }
 
-                            })
+                                })
                         })
                     },
-                    error: function(){
+                    error: function(xhr){
                         swal('error','Erreur lors de l\'affichage des informations','error')
                     }
                 })
             })
-
-            // $(document).on('click','.reserved',(){
-
-            // })
 
         </script>
     @endpush
