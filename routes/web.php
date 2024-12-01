@@ -15,16 +15,16 @@ Route::middleware('guest')->group(function(){
 
 
 Route::middleware('auth')->group(function () {
-    // Route Admin
+    // Route Agence
     Route::get('dashboard-admin',[ViewsAgences::class,'index'])->name('dashboard');
     Route::get('evenement',[ViewsAgences::class,'event'])->name('event');
     Route::get('tansactions',[ViewsAgences::class,'transaction'])->name('tansactions');
 
-    // ROute pour notre agence
+    // ROute pour notre Admin
     Route::get('dashboard-arc',[ViewsManagers::class,'index'])->name('arcDash');
     Route::get('tansactions-arc',[ViewsManagers::class,'transactions'])->name('tansactionsArc');
     Route::get('classement',[ViewsManagers::class,'classsement'])->name('classement');
-
+    Route::get('analytic',[ViewsManagers::class,'analytic'])->name('analyze');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

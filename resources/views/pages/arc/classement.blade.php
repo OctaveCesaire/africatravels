@@ -1,7 +1,5 @@
-@extends('pages.index')
-@section('content')
+<x-app-layout>
     <main class="main-content position-relative max-height-vh-100 h-100 ">
-        @include('layouts.arc.navbar')
         <div class="py-4 px-1">
             <div class="card bg-dark shadow">
                 <div class="card-header">
@@ -56,72 +54,72 @@
         </div>
     </main>
     <img src="" alt="">
-@endsection
 
-@push('js')
-    <script>
-        function isJsonEmpty(json) {
-            if (json === null || json === undefined) {
-                return true; // JSON est null ou undefined
-            }
-
-            if (typeof json === 'object') {
-                if (Array.isArray(json)) {
-                    return json.length === 0; // Vérifie si c'est un tableau vide
+    @push('js')
+        <script>
+            function isJsonEmpty(json) {
+                if (json === null || json === undefined) {
+                    return true; // JSON est null ou undefined
                 }
-                return Object.keys(json).length === 0; // Vérifie si c'est un objet sans clés
-            }
 
-            // Si ce n'est pas un objet ou tableau, ce n'est pas du JSON
-            return true;
-        }
-        function showModal(data, isReadonly) {
-            const readonlyAttr = isReadonly ? 'readonly' : '';
-            return swal({
-                title: isReadonly ? "Détail de l'agence" : "Mise à jour de l'Événement",
-                content: {
-                    element: 'div',
-                    attributes: {
-                        innerHTML: `
-                            <fieldset class="row col-12 border mb-2">
-                                <legend class="h5 col-12">INFORMATION SUR LE(S) EVENEMENT(S)</legend>
-                                <ul class="list-group list-group-numbered">
-                                    
-                                    <li class="list-group-item"> <strong> Nom du l'evenement  </strong>: <spam class="badge bg-info">NOTE </span> </li>
-                                </ul>
-                            </fieldset>
-                        `
+                if (typeof json === 'object') {
+                    if (Array.isArray(json)) {
+                        return json.length === 0; // Vérifie si c'est un tableau vide
                     }
-                } 
-            });
-        }
-        function handleAjaxError(xhr) {
-            if (xhr.status === 404) {
-                swal({ text: "Événement introuvable.", icon: 'error' });
-            } else if (xhr.status === 422) {
-                let errors = xhr.responseJSON.errors;
-                let errorMessage = Object.values(errors).map(err => err[0]).join('<br>');
-                swal({ title: "Erreur de validation", content: { element: 'div', attributes: { innerHTML: errorMessage } }, icon: 'error' });
-            } else {
-                swal({ text: "Une erreur est survenue.", icon: 'warning' });
-            }
-        }
-        $(document).on('click', '.consult', function () {
-            var id = $(this).data('id'); // Récupère l'ID de l'événement
-            $.ajax({
-                url: '/api/print-specific-event/' + id,
-                type: 'GET',
-                success: function (response) {
-                    if (!response) {
-                        swal({ text: "Aucune donnée disponible.", icon: 'error' });
-                        return;
-                    }
-                    showModal(response, true);
-                },
-                error: function (xhr) {
-                    handleAjaxError(xhr);
+                    return Object.keys(json).length === 0; // Vérifie si c'est un objet sans clés
                 }
+
+                // Si ce n'est pas un objet ou tableau, ce n'est pas du JSON
+                return true;
+            }
+            function showModal(data, isReadonly) {
+                const readonlyAttr = isReadonly ? 'readonly' : '';
+                return swal({
+                    title: isReadonly ? "Détail de l'agence" : "Mise à jour de l'Événement",
+                    content: {
+                        element: 'div',
+                        attributes: {
+                            innerHTML: `
+                                <fieldset class="row col-12 border mb-2">
+                                    <legend class="h5 col-12">INFORMATION SUR LE(S) EVENEMENT(S)</legend>
+                                    <ul class="list-group list-group-numbered">
+                                        
+                                        <li class="list-group-item"> <strong> Nom du l'evenement  </strong>: <spam class="badge bg-info">NOTE </span> </li>
+                                    </ul>
+                                </fieldset>
+                            `
+                        }
+                    } 
+                });
+            }
+            function handleAjaxError(xhr) {
+                if (xhr.status === 404) {
+                    swal({ text: "Événement introuvable.", icon: 'error' });
+                } else if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+                    let errorMessage = Object.values(errors).map(err => err[0]).join('<br>');
+                    swal({ title: "Erreur de validation", content: { element: 'div', attributes: { innerHTML: errorMessage } }, icon: 'error' });
+                } else {
+                    swal({ text: "Une erreur est survenue.", icon: 'warning' });
+                }
+            }
+            $(document).on('click', '.consult', function () {
+                var id = $(this).data('id'); // Récupère l'ID de l'événement
+                $.ajax({
+                    url: '/api/print-specific-event/' + id,
+                    type: 'GET',
+                    success: function (response) {
+                        if (!response) {
+                            swal({ text: "Aucune donnée disponible.", icon: 'error' });
+                            return;
+                        }
+                        showModal(response, true);
+                    },
+                    error: function (xhr) {
+                        handleAjaxError(xhr);
+                    }
+                });
             });
-        });
-    </script>
-@endpush
+        </script>
+    @endpush
+</x-app-layout>

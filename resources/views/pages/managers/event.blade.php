@@ -2,66 +2,68 @@
     <main class="main-content position-relative max-height-vh-100 h-100">
         {{-- @include('layouts.managers.navbar') --}}
         <div class="py-3 px-1">
-            <div class="card bg-dark shadow">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between">
-                        <h5 class="my-auto">MES EVENEMENTS</h5>
-                        <span class="btn my-auto btn-add btn-outline-info">
-                            <i class="ni ni-fat-add"></i>
-                        </span>
-                    </div>
-                </div>
-                <div class="card-body table-responsive">
-                    <table class="table">
-                        <thead>
-                            <th class="text-start" scope="col">#</th>
-                            <th class="text-center" scope="col">Nom</th>
-                            <th class="text-center" scope="col">Status</th>
-                            <th class="text-center" scope="col">Nbr participants</th>
-                            <th class="text-center" scope="col">
-                                <div class="d-flex">
-                                    <div class="my-auto">Date évènement</div>
-                                    <span class="my-auto sort-arrows d-flex flex-column">
-                                        <i class="sort-asc text-xxs" style="cursor: pointer" data-column="date" data-order="asc">&#9650;</i> <!-- Flèche haut -->
-                                        <i class="sort-desc text-xxs" style="cursor: pointer" data-column="date" data-order="desc">&#9660;</i> <!-- Flèche bas -->
-                                    </span>
-                                </div>
-                            </th>
-                        </thead>
-                        <tbody>
-                            @if ($list->count() > 0)
-                                @foreach ($list as $elt)
-                                    <tr>
-                                        <td class="my-auto text-start" scope="row">
-                                            <i class="ni ni-zoom-split-in btn btn-xs btn-outline-info consult" data-id="{{ $elt->id }}"></i>
-                                        </td>
-                                        <td class="my-auto text-center">{{ $elt->titre }}</td>
-                                        <td class="my-auto text-center">
-                                            {{-- @if ($elt->status === 'à venir') --}}
-                                                <span class="badge bg-warning">à venir</span>
-                                            {{-- @elseif ($elt->status === 'lancer') --}}
-                                                <span class="badge bg-success">lancer</span>
-                                            {{-- @elseif ($elt->status === 'finir') --}}
-                                                <span class="badge bg-danger">finir</span>
-                                            {{-- @endif --}}
-                                        </td>
-                                        <td class="my-auto text-center">
-                                            <span class="text-muted badge bg-secondary rounded">12</span>
-                                        </td>
-                                        <td class="my-auto text-center"><span class="text-white">{{ $elt->eventDate }}</span></td>
-                                    </tr>
-                                @endforeach   
-                            @else
-                                <tr class="text-center modal">
-                                    Aucuns événements d'organiser
-                                </tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+<div class="card bg-dark shadow">
+    <div class="card-header">
+        <div class="d-flex justify-content-between">
+            <h5 class="my-auto">MES EVENEMENTS</h5>
+            <span class="btn my-auto btn-add btn-outline-info" data-bs-toggle="modal" data-bs-target="#addEventModal">
+                <i class="ni ni-fat-add"></i>
+            </span>
+        </div>
+    </div>
+    <div class="card-body table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-start" scope="col">#</th>
+                    <th class="text-center" scope="col">Nom</th>
+                    <th class="text-center" scope="col">Status</th>
+                    <th class="text-center" scope="col">Nbr participants</th>
+                    <th class="text-center" scope="col">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <span>Date évènement</span>
+                            <span class="my-auto sort-arrows d-flex flex-column ms-2">
+                                <i class="sort-asc text-xxs" style="cursor: pointer" data-column="date" data-order="asc">&#9650;</i> <!-- Flèche haut -->
+                                <i class="sort-desc text-xxs" style="cursor: pointer" data-column="date" data-order="desc">&#9660;</i> <!-- Flèche bas -->
+                            </span>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if ($list->count() > 0)
+                    @foreach ($list as $elt)
+                        <tr>
+                            <td class="text-start">
+                                <button class="btn btn-xs btn-outline-info consult" data-id="{{ $elt->id }}">
+                                    <i class="ni ni-zoom-split-in"></i>
+                                </button>
+                            </td>
+                            <td class="text-center">{{ $elt->titre }}</td>
+                            <td class="text-center">
+                                <span class="badge bg-warning">à venir</span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-secondary rounded">12</span>
+                            </td>
+                            <td class="text-center">
+                                <span class="text-white">{{ $elt->eventDate }}</span>
+                            </td>
+                        </tr>
+                    @endforeach   
+                @else
+                    <tr class="text-center">
+                        <td colspan="5">Aucun événement organisé</td>
+                    </tr>
+                @endif
+            </tbody>
+        </table>
+    </div>
+</div>
+
         </div>
     </main>
+
     @push('js')
         <script>
             // Fonction de vérification de tableau vide ou pas
@@ -80,6 +82,8 @@
                 // Si ce n'est pas un objet ou tableau, ce n'est pas du JSON
                 return true;
             }
+
+            // Lorsque vous cliquez sur le bouton "Ajouter"
             $(document).on('click', '.btn-add', function () {
                 swal({
                     title: "Créer un événement",
@@ -107,7 +111,7 @@
                                 </div>
                                 <div class="col-12 mb-2">
                                     <label for="description" class="form-label">Description</label>
-                                    <textarea name="description" id="description" cols="30" rows="10" class="form-control"></textarea>
+                                    <textarea name="description" id="description" class="form-control" cols="30" rows="10"></textarea>
                                 </div>
                             `
                         }
@@ -124,61 +128,70 @@
                             closeModal: false,
                             value:true
                         }
-                    }
-                }).then((data) => {
-                    if (data) {
-                        var formData = new FormData();
-                        formData.append('_token', "{{ csrf_token() }}");
-                        formData.append('titre', $('#titre').val());
-                        formData.append('date', $('#date').val());
-                        formData.append('description', $('#description').val());
-                        formData.append('prix', $('#prix').val());
-                        formData.append('image', $('#galerie')[0].files[0]);
+                    },
+                    confirm: {
+                        text: 'Créer',
+                        className: 'creer',
+                        closeModal: false,
+                        value: true,
+                        onClick: function() {
+                            // Récupérer le contenu de Quill
+                            const description = quill.root.innerHTML;
+                            var formData = new FormData();
+                            formData.append('_token', "{{ csrf_token() }}");
+                            formData.append('titre', $('#titre').val());
+                            formData.append('date', $('#date').val());
+                            formData.append('description', description); // Ajouter la description du Quill
+                            formData.append('prix', $('#prix').val());
+                            formData.append('image', $('#galerie')[0].files[0]);
 
-                        $.ajax({
-                            url: '/api/event-create',
-                            type: 'POST',
-                            data: formData,
-                            processData: false,
-                            contentType: false,
-                            success: function (response) {
-                                swal({
-                                    text: "Événement créé avec succès",
-                                    icon: 'success'
-                                }).then(() => {
-                                    location.reload();
-                                });
-                            },
-                            error: function (xhr) {
-                                if (xhr.status === 422) { // Erreur de validation
-                                    let errors = xhr.responseJSON.errors;
-                                    let errorMessage = "";
-                                    for (const field in errors) {
-                                        errorMessage += `${errors[field][0]}<br>`;
+                            $.ajax({
+                                url: '/api/event-create',
+                                type: 'POST',
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                success: function (response) {
+                                    swal({
+                                        text: "Événement créé avec succès",
+                                        icon: 'success'
+                                    }).then(() => {
+                                        location.reload();
+                                    });
+                                },
+                                error: function (xhr) {
+                                    if (xhr.status === 422) {
+                                        let errors = xhr.responseJSON.errors;
+                                        let errorMessage = "";
+                                        for (const field in errors) {
+                                            errorMessage += `${errors[field][0]}<br>`;
+                                        }
+                                        swal({
+                                            title: "Erreur de validation",
+                                            content: {
+                                                element: 'div',
+                                                attributes: {
+                                                    innerHTML: errorMessage
+                                                }
+                                            },
+                                            icon: 'error'
+                                        });
+                                    } else {
+                                        swal({
+                                            text: "Impossible d'enregistrer vos données, veuillez réessayer.",
+                                            icon: 'warning'
+                                        });
                                     }
-                                    swal({
-                                        title: "Erreur de validation",
-                                        content: {
-                                            element: 'div',
-                                            attributes: {
-                                                innerHTML: errorMessage
-                                            }
-                                        },
-                                        icon: 'error'
-                                    });
-                                } else {
-                                    swal({
-                                        text: "Impossible d'enregistrer vos données, veuillez réessayer.",
-                                        icon: 'warning'
-                                    });
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 });
             });
+
+            // Lorsque vous cliquez sur l'icône de consultation d'un événement
             $(document).on('click', '.consult', function () {
-                var id = $(this).data('id'); // Récupère l'ID de l'événement
+                var id = $(this).data('id');
                 $.ajax({
                     url: '/api/print-specific-event/' + id,
                     type: 'GET',
@@ -188,13 +201,11 @@
                             return;
                         }
 
-                        // Affiche la modale de consultation
                         showModal(response, true).then((editAction) => {
                             if (editAction) {
-                                // Passe en mode édition
                                 showModal(response, false).then((updateAction) => {
                                     if (updateAction) {
-                                        updateEvent(id); // Lance la mise à jour
+                                        updateEvent(id);
                                     }
                                 });
                             }
@@ -205,6 +216,8 @@
                     }
                 });
             });
+
+            // Fonction pour afficher la modale de consultation ou édition
             function showModal(data, isReadonly) {
                 const readonlyAttr = isReadonly ? 'readonly' : '';
                 return swal({
@@ -234,7 +247,7 @@
                                 </div>
                                 <div class="col-12 mb-2">
                                     <label>Description</label>
-                                    <textarea id="description cols="30" rows="10" class="form-control" ${readonlyAttr}>${data.description || ''}</textarea>
+                                    <textarea name="description" id="description" class="form-control" cols="30" rows="10" ${readonlyAttr}>${data.description || ''}</textarea>
                                 </div>
                             `
                         }
@@ -244,68 +257,6 @@
                         : { cancel: "Annuler", update: { text: "Mettre à jour", visible: true, closeModal: false } }
                 });
             }
-            function updateEvent(id) {
-                var formData = new FormData();
-                formData.append('_token', "{{ csrf_token() }}");
-                formData.append('titre', $('#titre').val());
-                formData.append('date', $('#date').val());
-                formData.append('description', $('#description').val());
-                formData.append('prix', $('#prix').val());
-
-                const imageFile = $('#galerie')[0].files[0];
-                if (imageFile) formData.append('image', imageFile);
-
-                $.ajax({
-                    url: '/api/update-event/' + id,
-                    type: 'POST', // PUT selon l'implémentation backend
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function () {
-                        swal({ icon: 'success', text: 'Données mises à jour avec succès.' });
-                    },
-                    error: function (xhr) {
-                        handleAjaxError(xhr);
-                    }
-                });
-            }
-            function handleAjaxError(xhr) {
-                if (xhr.status === 404) {
-                    swal({ text: "Événement introuvable.", icon: 'error' });
-                } else if (xhr.status === 422) {
-                    let errors = xhr.responseJSON.errors;
-                    let errorMessage = Object.values(errors).map(err => err[0]).join('<br>');
-                    swal({ title: "Erreur de validation", content: { element: 'div', attributes: { innerHTML: errorMessage } }, icon: 'error' });
-                } else {
-                    swal({ text: "Une erreur est survenue.", icon: 'warning' });
-                }
-            }
-
-            // Trie par date
-            function sortTable(columnIndex, order) {
-                const tableBody = document.getElementById('table-body');
-                const rows = Array.from(tableBody.rows);
-
-                rows.sort((a, b) => {
-                    const dateA = new Date(a.cells[columnIndex].innerText);
-                    const dateB = new Date(b.cells[columnIndex].innerText);
-
-                    return order === 'asc' ? dateA - dateB : dateB - dateA;
-                });
-
-                // Réinsérer les lignes triées dans le tableau
-                tableBody.innerHTML = '';
-                rows.forEach(row => tableBody.appendChild(row));
-            }
-
-            // Gestion des clics sur les flèches de tri
-            document.querySelectorAll('.sort-arrows i').forEach(arrow => {
-                arrow.addEventListener('click', () => {
-                    const columnIndex = 4; // Index de la colonne "Date paiement" (0-based)
-                    const order = arrow.dataset.order; // asc ou desc
-                    sortTable(columnIndex, order);
-                });
-            });
         </script>
     @endpush
 </x-app-layout>

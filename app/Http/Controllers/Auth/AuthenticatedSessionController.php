@@ -28,7 +28,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
         if(auth()->user()->hasRole('admin'))
-            return redirect()->route('dash');
+            return redirect()->route('dashboard');
         
         if(auth()->user()->hasRole('manager'))
             return redirect()->route('arcDash');

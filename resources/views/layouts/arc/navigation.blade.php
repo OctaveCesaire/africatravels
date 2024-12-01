@@ -15,6 +15,9 @@
                     <x-nav-link :href="route('arcDash')" :active="request()->routeIs('arcDash')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('analyze')" :active="request()->routeIs('analyze')">
+                        {{ __('Analyse') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('classement')" :active="request()->routeIs('classement')">
                         {{ __('Classement') }}
                     </x-nav-link>
@@ -75,6 +78,9 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('arcDash')" :active="request()->routeIs('arcDash')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('analyze')" :active="request()->routeIs('analyze')">
+                {{ __('Analyse') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('classement')" :active="request()->routeIs('classement')">
                 {{ __('Classement') }}
