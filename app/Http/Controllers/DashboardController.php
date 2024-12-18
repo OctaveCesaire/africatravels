@@ -18,15 +18,15 @@ class DashboardController extends Controller
     public function index()
     {
         $roles = Auth::user();
-        // $user = DB::table('roles')->where('id', $roles->role_id)->first();
+        $user = DB::table('roles')->where('id', $roles->role_id)->first();
 
-        // if ($user->display_name === 'Administrator') {
+        if ($user->display_name === 'Administrator') {
             return $this->adminDashboard();
-        // } elseif ($user->display_name === 'Tourism Agency') {
-        //     return $this->agencyDashboard();
-        // } else {
-        //     return $this->userDashboard();
-        // }
+        } elseif ($user->display_name === 'Tourism Agency') {
+            return $this->agencyDashboard();
+        } else {
+            return $this->userDashboard();
+        }
     }
 
     // Dashboard for regular users
@@ -48,7 +48,7 @@ class DashboardController extends Controller
             ->latest()
             ->paginate(10);
 
-        $events = Event::where('agency_id', Auth::id())
+        $events = Event::where('created_by', Auth::id())
             ->latest()
             ->paginate(10);
 

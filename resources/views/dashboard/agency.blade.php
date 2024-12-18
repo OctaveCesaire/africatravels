@@ -48,24 +48,24 @@
             @foreach ($events as $event)
                 <tr>
                     <td>{{ $event->name }}</td>
-                    <td>{{ $event->date->format('d-m-Y') }}</td>
+                    <td>{{ $event->start_date }}</td>
                     <td>{{ $event->location }}</td>
                     <td>
-                        <a href="{{ route('events.edit', $event->id) }}" class="btn btn-primary btn-sm">Modifier</a>
-                        <form action="{{ route('events.destroy', $event->id) }}" method="POST" style="display:inline;">
+                        {{-- <a href="{{ route('events.edit', $event->id) }}" class="btn btn-primary btn-sm">Modifier</a> --}}
+                        {{-- <form action="{{ route('events.destroy', $event->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                        </form>
+                        </form> --}}
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
     {{ $events->links() }}
-    @if ($pendingServices->count() > 0)
+    @if ($services->count() > 0)
         <div class="alert alert-warning">
-            Vous avez {{ $pendingServices->count() }} service(s) en attente de validation.
+            Vous avez {{ $services->count() }} service(s) en attente de validation.
         </div>
     @endif
     @if ($events->count() == 0)

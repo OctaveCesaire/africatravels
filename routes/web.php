@@ -16,11 +16,11 @@ Route::get('/agencies', [App\Http\Controllers\AgencyController::class, 'index'])
 Route::get('/agencies/{id}', [App\Http\Controllers\AgencyController::class, 'show'])->name('agency.details');
 Route::get('/galleries', [App\Http\Controllers\GalleryController::class, 'index'])->name('gallery');
 Auth::routes();
-Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+// Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
-// Route::middleware(['auth'])->group(function () {
-//     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
-// });
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+});
 
 
 Route::group(['prefix' => 'sudashboard'], function () {
