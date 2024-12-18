@@ -15,7 +15,7 @@ trait VoyagerUser
      */
     public function role()
     {
-        return $this->belongsTo(Voyager::modelClass('Role'), 'role_id');
+        return $this->belongsTo(Voyager::modelClass('Role'));
     }
 
     /**
@@ -117,25 +117,9 @@ trait VoyagerUser
     {
         $this->loadRolesRelations();
 
-        if ($this->load('role') && !$this->role->relationLoaded('permissions')) {
+        if ($this->role && !$this->role->relationLoaded('permissions')) {
             $this->role->load('permissions');
             $this->load('roles.permissions');
         }
-        /*
-
-         // Charger explicitement la relation 'role' si elle n'est pas déjà chargée
-        if (!$this->relationLoaded('role')) {
-            $this->load('role');
-        }
-
-        // Vérifiez que 'role' est une instance de Role avant de tenter d'accéder à 'permissions'
-        if ($this->role instanceof \TCG\Voyager\Models\Role && !$this->role->relationLoaded('permissions')) {
-            $this->role->load('permissions');
-        }
-
-        if (!$this->relationLoaded('roles')) {
-            $this->load('roles');
-        }
-        */
     }
 }
