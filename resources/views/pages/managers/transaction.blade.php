@@ -1,56 +1,61 @@
 <x-app-layout>
     <main class="main-content position-relative max-height-vh-100 h-100 ">
         {{-- @include('layouts.managers.navbar') --}}
-        <div class="py-2 px-1">
-            <div class="card bg-dark shadow">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between">
-                        <h5 class="my-auto">LES TRANSACTIONS</h5>
-                        <span class="my-auto badge bg-info">
-                            Note : >= 4.5
-                        </span>
+        <div class="py-2 px-1 col-12 row">
+            <div class="col-md-6" >
+                <div class="card bg-dark shadow">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="my-auto">LES TRANSACTIONS</h5>
+                            <span class="my-auto badge bg-info">
+                                Note : >= 4.5
+                            </span>
+                        </div>
                     </div>
-                </div>
-                <div class="card-body table-responsive">
-                    <table class="table ">
-                        <thead>
-                            <th class="text-start" scope="col">#</th>
-                            <th class="text-center" scope="col">Nom</th>
-                            <th class="text-center" scope="col">Status</th>
-                            <th class="text-center" scope="col">Evènements</th>
-                            <th class="text-center" scope="col">Date paiement </th>
-                        </thead>
-                        <tbody>
+                    <div class="card-body table-responsive">
+                        <table id="dataTable" class="table table-hover">               
                             @if ($list->count() > 0)
-                                @foreach ($list as $elt)
+                                <thead>
                                     <tr>
-                                        <td class="my-auto text-start" scope="row">
-                                            <i class="ni ni-zoom-split-in btn btn-xs btn-outline-info consult" data-id="{{ $elt->id }}"></i>
-                                        </td>
-                                        <td class="my-auto text-center">{{ $elt->titre }}</td>
-                                        <td class="my-auto text-center">
-                                            {{-- @if ($elt->status === 'à venir') --}}
-                                                <span class="badge bg-warning">à venir</span>
-                                            {{-- @elseif ($elt->status === 'lancer') --}}
-                                                <span class="badge bg-success">lancer</span>
-                                            {{-- @elseif ($elt->status === 'finir') --}}
-                                                <span class="badge bg-danger">finir</span>
-                                            {{-- @endif --}}
-                                        </td>
-                                        <td class="my-auto text-center">
-                                            <span class="text-muted badge bg-secondary rounded">Evenement</span>
-                                        </td>
-                                        <td class="my-auto text-center"><span class="text-white">12 Dec 2023</span></td>
+                                        @foreach($list->first()->getAttributes() as $key => $value)
+                                            <th class="text-center" scope="col">{!! $key == 'id' ? "#" : $key !!}</th>
+                                        @endforeach
                                     </tr>
-                                @endforeach   
+                                </thead>
+                                <tbody>
+                                    @foreach($list as $data)
+                                        @foreach ($list as $elt)
+                                            <tr>
+                                                <td class="my-auto text-center" scope="row">
+                                                    {{$elt->id}}
+                                                </td>
+                                                <td class="my-auto text-center">{{ $elt->name }}</td>
+                                                <td class="my-auto text-center">
+                                                    @if ($elt->status === 'success')
+                                                        <span class="badge bg-success">Effectué</span>
+                                                    @else
+                                                        <span class="badge bg-danger">Echec/Annulation</span>
+                                                    @endif
+                                                </td>
+                                                <td class="my-auto text-center">
+                                                    <span class="text-white">12 Dec 2023</span>
+                                                </td>
+                                            </tr>
+                                        @endforeach                          
+                                    @endforeach
+                                </tbody>
                             @else
-                                <tr class="text-center modal">
+                                <tr class="text-center alert">
                                     Aucunes transactions enregistrer
                                 </tr>
                             @endif
-                        </tbody>
-                    </table>
+                        </table>
+                    </div>
                 </div>
+            </div>
+            
+            <div class="col-md-6 mt-6" >
+                CHART CIRCLE
             </div>
         </div>
     </main>

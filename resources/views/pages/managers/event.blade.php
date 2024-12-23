@@ -1,66 +1,66 @@
 <x-app-layout>
     <main class="main-content position-relative max-height-vh-100 h-100">
-        {{-- @include('layouts.managers.navbar') --}}
         <div class="py-3 px-1">
-<div class="card bg-dark shadow">
-    <div class="card-header">
-        <div class="d-flex justify-content-between">
-            <h5 class="my-auto">MES EVENEMENTS</h5>
-            <span class="btn my-auto btn-add btn-outline-info" data-bs-toggle="modal" data-bs-target="#addEventModal">
-                <i class="ni ni-fat-add"></i>
-            </span>
-        </div>
-    </div>
-    <div class="card-body table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th class="text-start" scope="col">#</th>
-                    <th class="text-center" scope="col">Nom</th>
-                    <th class="text-center" scope="col">Status</th>
-                    <th class="text-center" scope="col">Nbr participants</th>
-                    <th class="text-center" scope="col">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <span>Date évènement</span>
-                            <span class="my-auto sort-arrows d-flex flex-column ms-2">
-                                <i class="sort-asc text-xxs" style="cursor: pointer" data-column="date" data-order="asc">&#9650;</i> <!-- Flèche haut -->
-                                <i class="sort-desc text-xxs" style="cursor: pointer" data-column="date" data-order="desc">&#9660;</i> <!-- Flèche bas -->
-                            </span>
-                        </div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @if ($list->count() > 0)
-                    @foreach ($list as $elt)
-                        <tr>
-                            <td class="text-start">
-                                <button class="btn btn-xs btn-outline-info consult" data-id="{{ $elt->id }}">
-                                    <i class="ni ni-zoom-split-in"></i>
-                                </button>
-                            </td>
-                            <td class="text-center">{{ $elt->titre }}</td>
-                            <td class="text-center">
-                                <span class="badge bg-warning">à venir</span>
-                            </td>
-                            <td class="text-center">
-                                <span class="badge bg-secondary rounded">12</span>
-                            </td>
-                            <td class="text-center">
-                                <span class="text-white">{{ $elt->eventDate }}</span>
-                            </td>
-                        </tr>
-                    @endforeach   
-                @else
-                    <tr class="text-center">
-                        <td colspan="5">Aucun événement organisé</td>
-                    </tr>
-                @endif
-            </tbody>
-        </table>
-    </div>
-</div>
-
+            <div class="card bg-dark shadow">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="my-auto">MES EVENEMENTS</h5>
+                        <span class="btn my-auto btn-add btn-outline-info" data-bs-toggle="modal" data-bs-target="#addEventModal">
+                            <i class="ni ni-fat-add"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body table-responsive">
+                
+                    <table id="dataTable" class="table table-hover">               
+                        @if ($list->count() > 0)
+                            <thead>
+                                <tr>
+                                    @foreach($list->first()->getAttributes() as $key => $value)
+                                        <th class="text-center" scope="col">{!! $key == 'id' ? "#" : $key !!}</th>
+                                    @endforeach
+                                    <th class="text-center">{{ __('Nbr participant') }}</th>
+                                    <th class="actions text-center">{{ __('ACTIONS') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($list as $data)
+                                    @foreach ($list as $elt)
+                                        <tr>
+                                            <td class="my-auto text-center" scope="row">
+                                                {{$elt->id}}
+                                            </td>
+                                            <td class="my-auto text-center">{{ $elt->titre }}</td>
+                                            <td class="my-auto text-center">
+                                                @if ($elt->status === 'coming')
+                                                    <span class="badge bg-warning">à venir</span>
+                                                @elseif ($elt->status === 'launch')
+                                                    <span class="badge bg-success">lancer</span>
+                                                @elseif ($elt->status === 'done')
+                                                    <span class="badge bg-danger">finir</span>
+                                                @endif
+                                            </td>
+                                            <td class="my-auto text-center">
+                                                <span class="text-white">12 Dec 2023</span>
+                                            </td>
+                                            <td class="my-auto text-center">
+                                                <span class="text-muted badge bg-secondary rounded">12</span>
+                                            </td>
+                                            <td class="my-auto text-center" scope="row">
+                                                <i class="ni ni-zoom-split-in fa-xs btn btn-xs btn-outline-info consult" data-id="{{ $elt->id }}"></i>
+                                            </td>
+                                        </tr>
+                                    @endforeach                          
+                                @endforeach
+                            </tbody>
+                        @else
+                            <tr class="text-center alert">
+                                Aucunes transactions enregistrer
+                            </tr>
+                        @endif
+                    </table>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -189,34 +189,6 @@
                 });
             });
 
-            // Lorsque vous cliquez sur l'icône de consultation d'un événement
-            $(document).on('click', '.consult', function () {
-                var id = $(this).data('id');
-                $.ajax({
-                    url: '/api/print-specific-event/' + id,
-                    type: 'GET',
-                    success: function (response) {
-                        if (!response) {
-                            swal({ text: "Aucune donnée disponible.", icon: 'error' });
-                            return;
-                        }
-
-                        showModal(response, true).then((editAction) => {
-                            if (editAction) {
-                                showModal(response, false).then((updateAction) => {
-                                    if (updateAction) {
-                                        updateEvent(id);
-                                    }
-                                });
-                            }
-                        });
-                    },
-                    error: function (xhr) {
-                        handleAjaxError(xhr);
-                    }
-                });
-            });
-
             // Fonction pour afficher la modale de consultation ou édition
             function showModal(data, isReadonly) {
                 const readonlyAttr = isReadonly ? 'readonly' : '';
@@ -257,6 +229,46 @@
                         : { cancel: "Annuler", update: { text: "Mettre à jour", visible: true, closeModal: false } }
                 });
             }
+
+            // Lorsque vous cliquez sur l'icône de consultation d'un événement
+            /*$(document).on('click', '.consult', function () {
+                var id = $(this).data('id');
+                swal(id);
+                $.ajax({
+                    url: '/api/print-specific-event/' + id,
+                    type: 'GET',
+                    success: function (response) {
+                        if (!response) {
+                            swal({ text: "Aucune donnée disponible.", icon: 'error' });
+                            return;
+                        }
+
+                        showModal(response, true).then((editAction) => {
+                            if (editAction) {
+                                showModal(response, false).then((updateAction) => {
+                                    if (updateAction) {
+                                        updateEvent(id);
+                                    }
+                                });
+                            }
+                        });
+                    },
+                    error: function (xhr) {
+                        handleAjaxError(xhr);
+                    }
+                });
+            });*/
+            $(document).on('click','.consult',function(){
+                var id = $(this).data('id');
+                $.ajax({
+                    url : '/api/print-specific-event/'+id;
+                    type:'GET',
+                    success:function(response){
+                        swal(`HELLO ${id}`);
+                    }
+                })
+            })
+
         </script>
     @endpush
 </x-app-layout>

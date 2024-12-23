@@ -11,42 +11,67 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <table class="table ">
+
+                    <table id="dataTable" class="table table-hover">
                         <thead>
-                            <th class="text-start" scope="col">#</th>
-                            <th class="text-center" scope="col">Nom</th>
-                            <th class="text-center" scope="col">Status</th>
-                            <th class="text-center" scope="col">Evènements</th>
-                            <th class="text-center" scope="col">Date paiement </th>
+                            <tr>
+                                @foreach($dataType as $key => $value)
+                                    <?php $key =='id' ? echo '<th class="text-start" scope="col">#</th>' : echo`<th class="text-center" scope="col">$value</th>` ?>
+                                @endforeach
+                                <th class="actions text-right">{{ __('ACTIONS') }}</th>
+                            </tr>
                         </thead>
                         <tbody>
-                            @if ($list->count() > 0)
-                                @foreach ($list as $elt)
-                                    <tr>
-                                        <td class="my-auto text-start" scope="row">
-                                            <i class="ni ni-zoom-split-in fa-xs btn btn-xs btn-outline-info consult" data-id="{{ $elt->id }}"></i>
-                                        </td>
-                                        <td class="my-auto text-center">{{ $elt->titre }}</td>
-                                        <td class="my-auto text-center">
-                                            {{-- @if ($elt->status === 'à venir') --}}
-                                                <span class="badge bg-warning">à venir</span>
-                                            {{-- @elseif ($elt->status === 'lancer') --}}
-                                                <span class="badge bg-success">lancer</span>
-                                            {{-- @elseif ($elt->status === 'finir') --}}
-                                                <span class="badge bg-danger">finir</span>
-                                            {{-- @endif --}}
-                                        </td>
-                                        <td class="my-auto text-center">
-                                            <span class="text-muted badge bg-secondary rounded">Evenement</span>
-                                        </td>
-                                        <td class="my-auto text-center"><span class="text-white">12 Dec 2023</span></td>
-                                    </tr>
-                                @endforeach   
-                            @else
-                                <tr class="text-center modal">
-                                    Aucunes transactions enregistrer
+                            @foreach($dataTypeContent as $data)
+                                <tr>
+
+                                    @if ($list->count() > 0)
+                                        @foreach ($list as $elt)
+                                            <tr>
+                                                <td class="my-auto text-start" scope="row">
+                                                    <i class="ni ni-zoom-split-in fa-xs btn btn-xs btn-outline-info consult" data-id="{{ $elt->id }}"></i>
+                                                </td>
+                                                <td class="my-auto text-center">{{ $elt->titre }}</td>
+                                                <td class="my-auto text-center">
+                                                    {{-- @if ($elt->status === 'à venir') --}}
+                                                        <span class="badge bg-warning">à venir</span>
+                                                    {{-- @elseif ($elt->status === 'lancer') --}}
+                                                        <span class="badge bg-success">lancer</span>
+                                                    {{-- @elseif ($elt->status === 'finir') --}}
+                                                        <span class="badge bg-danger">finir</span>
+                                                    {{-- @endif --}}
+                                                </td>
+                                                <td class="my-auto text-center">
+                                                    <span class="text-muted badge bg-secondary rounded">Evenement</span>
+                                                </td>
+                                                <td class="my-auto text-center"><span class="text-white">12 Dec 2023</span></td>
+                                            </tr>
+                                        @endforeach 
+                                        
+                                        <td class="no-sort no-click bread-actions">
+                                            @can('delete', $data)
+                                                <div class="btn btn-sm btn-danger pull-right delete" data-id="{{ $data->{$data->getKeyName()} }}">
+                                                    <i class="voyager-trash"></i> {{ __('voyager::generic.delete') }}
+                                                </div>
+                                            @endcan
+                                            @can('edit', $data)
+                                                <a href="{{ route('voyager.'.$dataType->slug.'.edit', $data->{$data->getKeyName()}) }}" class="btn btn-sm btn-primary pull-right edit">
+                                                    <i class="voyager-edit"></i> {{ __('voyager::generic.edit') }}
+                                                </a>
+                                            @endcan
+                                            @can('edit', $data)
+                                                <a href="{{ route('voyager.'.$dataType->slug.'.builder', $data->{$data->getKeyName()}) }}" class="btn btn-sm btn-success pull-right">
+                                                    <i class="voyager-list"></i> {{ __('voyager::generic.builder') }}
+                                                </a>
+                                            @endcan
+                                        </td>  
+                                    @else
+                                        <tr class="text-center modal">
+                                            Aucunes transactions enregistrer
+                                        </tr>
+                                    @endif
                                 </tr>
-                            @endif
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

@@ -24,6 +24,8 @@ Route::get('info/{id}',[ApiClients::class,'eventDetail']);
 // Manager
 Route::post('event-create',[ApiAgences::class,'eventCreate']);
 Route::get('print-specific-event/{id}',[ApiAgences::class,'showEvent']);
+
+
 Route::get('avis/{id}',function($id){
     $avis = [
         1=>[

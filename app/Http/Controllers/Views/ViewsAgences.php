@@ -17,6 +17,12 @@ class ViewsAgences extends Controller
         });
         return view('pages.managers.index')->with('chartData', $chartData);
     }
-    function event(){$eventList = Voyages::all();return view('pages.managers.event')->with('list',$eventList);}
-    function transaction(){$eventList = Voyages::all();return view('pages.managers.transaction')->with('list',$eventList);}
+    function event(){
+        $eventList = Voyages::select('id','titre','status','eventDate')->get();
+        return view('pages.managers.event')->with('list',$eventList);
+    }
+    function transaction(){
+        $eventList = Transactions::select('transactions.id','name','status','transactions.created_at')->join('users','users.id','transactions.user_id')
+                    ->get();
+        return view('pages.managers.transaction')->with('list',$eventList);}
 }

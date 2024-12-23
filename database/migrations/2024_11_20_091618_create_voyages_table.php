@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->longText('description');
             $table->mediumText('titre');
+            $table->string('status')->default('coming');
             $table->dateTime('eventDate');
             $table->integer('prix');
             $table->json('images');
