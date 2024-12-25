@@ -15,18 +15,17 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'first_name', 'last_name', 'birth_date',
+        'phone', 'email', 'password'
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $hidden = [
         'password',
@@ -45,7 +44,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function hasRole($role){return $this->roles()->where('roles.name',$role)->exists();}
-    public function roles(){return $this->belongsToMany(Roles::class, 'role_users','user_id','role_id');}
 
+    /**
+     * Get the user that owns the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function rule(): BelongsTo
+    {
+        return $this->belongsTo(Rule::class, 'rule', 'id');
+    }
 }

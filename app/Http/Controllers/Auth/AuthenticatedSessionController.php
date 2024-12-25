@@ -27,12 +27,8 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-        if(auth()->user()->hasRole('admin'))
-            return redirect()->route('dashboard');
-        
-        if(auth()->user()->hasRole('manager'))
-            return redirect()->route('arcDash');
-        return redirect()->route('home');
+
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     /**
